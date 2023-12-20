@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/_head') %>
+<body>
+    <%- include('./partials/_navbar') %>
+      <% data.forEach(el => { %>
+        <div class="card" style="width: 18rem;">
+          <img src="<%= el.imgUrl %>" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h4 class="card-title"><%= el.name %></h4>
+            <h5 class="card-title"><%= el.rate %></h5>
+            <h5 class="card-title"><%= el.price %> </h5>
+            <h5 class="card-title"><%= el.location %></h5>
+            <h6 class="card-title"><%= el.facility %></h6>
+            <a href="/guest/form" class="btn btn-primary">Booking</a>
+          </div>
+        </div>
+     <% }) %>
+
+
+</body>
+</html>

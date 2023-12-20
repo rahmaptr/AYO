@@ -5,6 +5,7 @@ const fs = require('fs')
 module.exports = {
   async up (queryInterface, Sequelize) {
    let data = JSON.parse(fs.readFileSync('./data/hotel.json', 'utf-8')).map(el=>{
+    el.facility = el.facility.join(", ")
     el.createdAt = el.updatedAt = new Date()
     return el
    })
