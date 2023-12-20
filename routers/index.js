@@ -2,7 +2,13 @@ const express = require('express')
 const router = express.Router()
 const Controller = require('../controllers')
 
-router.get('/', Controller.sign)
+router.get('/', Controller.landingPage)
+router.get('/register', Controller.register)
+router.post('/register', Controller.postRegister)
+router.get('/login', Controller.login)
+router.post('/login', Controller.checkRole)
+
+// router.use()
 
 router.get('/guest/hotels', Controller.getAllHotel)
 router.get('/guest/hotels/:idHotel/form', Controller.getBookingGuest)

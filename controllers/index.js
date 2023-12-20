@@ -1,19 +1,43 @@
 const { User, Room, Hotel, Booking, Profile } = require('../models')
-const { Op } = require("sequelize");
+const { Op } = require("sequelize")
+const bcrypt = require('bcryptjs')
 // const valuation = require('../helper/valuation')
 
 class Controller {
-    static async sign(req, res){
+    static landingPage(req, res) {
+        res.render('landingPage')
+    }
+
+    static register(req, res) {
+        res.render('register')
+    }
+
+    static async postRegister(req, res) {
         try {
-            res.render("sign")
+            const {email, password, role} = req.body
+            await User.create({email, password, role})
+            res.redirect('/')
         } catch (error) {
             res.send(error)
         }
     }
 
+    static login(req, res) {
+        res.render('login')
+    }
+
     static async checkRole(req, res) {
         try {
-            //Buat routing sesuai role
+            const {email, password} = req.body
+            const user = await User.findOne({
+                where: {
+                    email: email
+                }
+            })
+            if (!user || !bcrypt.compareSync(password, user.password)) {
+                throw new Error('Email/Password not found')
+            }
+            res.redirect(`/${user.role.toLowerCase()}/hotels`)
         } catch (error) {
             res.send(error);
         }
