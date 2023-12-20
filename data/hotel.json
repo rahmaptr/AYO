@@ -1,0 +1,30 @@
+[
+    {
+      "name": "Hotel Anggun",
+      "rate": 4,
+      "facility": ["Free Wi-Fi", "Swimming Pool", "Fitness Center"],
+      "price": 1500000,
+      "location": "Jakarta"
+    },
+    {
+      "name": "Hotel Boby",
+      "rate": 4,
+      "facility": ["Free Parking", "Restaurant", "Spa"],
+      "price": 1600000,
+      "location": "Bandung"
+    },
+    {
+      "name": "Hotel Cinta",
+      "rate": 5,
+      "facility": ["Airport Shuttle", "Conference Rooms", "Breakfast Included"],
+      "price": 1700000,
+      "location": "Surabaya"
+    },
+    {
+      "name": "Hotel Dody",
+      "rate": 3,
+      "facility": ["Pet Friendly", "Bar", "Laundry Service"],
+      "price": 1800000,
+      "location": "Bali"
+    }
+  ]
