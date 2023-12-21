@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const helper = require('../helpers/helper');
 module.exports = (sequelize, DataTypes) => {
   class Hotel extends Model {
     /**
@@ -9,17 +10,81 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
+    get formatToIdr() {
+      return helper.formatToIdr(this.price)
+    }
+    
     static associate(models) {
       Hotel.belongsToMany(models.User, {through: models.Booking, foreignKey: 'HotelId'})
       Hotel.hasMany(models.Room)
     }
   }
   Hotel.init({
-    name: DataTypes.STRING,
-    rate: DataTypes.INTEGER,
-    facility: DataTypes.STRING,
-    price: DataTypes.INTEGER,
-    location: DataTypes.STRING
+    name: {
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate:{
+        notNull: {
+          msg: "name tidak boleh kosong"
+        },
+        notEmpty:{
+          msg: "name tidak boleh kosong"
+
+        }
+      }
+    },
+    rate: {
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate:{
+        notNull: {
+          msg: "rate tidak boleh kosong"
+        },
+        notEmpty:{
+          msg: "rate tidak boleh kosong"
+
+        }
+      }
+    },
+    facility: {
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate:{
+        notNull: {
+          msg: "facility tidak boleh kosong"
+        },
+        notEmpty:{
+          msg: "facility tidak boleh kosong"
+
+        }
+      }
+    },
+    price: {
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate:{
+        notNull: {
+          msg: "price tidak boleh kosong"
+        },
+        notEmpty:{
+          msg: "price tidak boleh kosong"
+
+        }
+      }
+    },
+    location: {
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate:{
+        notNull: {
+          msg: "location tidak boleh kosong"
+        },
+        notEmpty:{
+          msg: "location tidak boleh kosong"
+
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'Hotel',

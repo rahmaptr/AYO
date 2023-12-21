@@ -10,35 +10,35 @@
 
 <body>
 
-  <form id="hostForm" class="container mt-5">
+  <form id="hostForm" class="container mt-5" action="/host/hotels/<%= hotel.id %>/edit" method="post">
     <h2 class="mb-4">Host Edit Form</h2>
 
     <div class="mb-3">
       <label for="name" class="form-label">Name:</label>
-      <input type="text" id="name" name="name" class="form-control" required>
+      <input type="text" id="name" name="name" class="form-control" value="<%= hotel.name %>">
     </div>
 
     <div class="mb-3">
       <label for="rate" class="form-label">Rate:</label>
-      <input type="number" id="rate" name="rate" class="form-control" required>
+      <input type="number" id="rate" name="rate" class="form-control" value="<%= hotel.rate %>">
     </div>
 
     <div class="mb-3">
       <label for="facility" class="form-label">Facility:</label>
-      <input type="text" id="facility" name="facility" class="form-control" required>
+      <input type="text" id="facility" name="facility" class="form-control" value="<%= hotel.facility %>">
     </div>
 
     <div class="mb-3">
       <label for="price" class="form-label">Price:</label>
-      <input type="number" id="price" name="price" class="form-control" required>
+      <input type="number" id="price" name="price" class="form-control" value="<%= hotel.price %>">
     </div>
 
     <div class="mb-3">
       <label for="location" class="form-label">Location:</label>
-      <input type="text" id="location" name="location" class="form-control" required>
+      <input type="text" id="location" name="location" class="form-control" value="<%= hotel.location %>">
     </div>
 
-    <a href="/host/hotels"><button type="submit" class="btn btn-success">Submit</button></a>
+    <input type="submit" value="Submit" class="btn btn-primary">
   
   </form>
 

@@ -2,11 +2,19 @@ const express = require('express')
 const router = express.Router()
 const Controller = require('../controllers')
 
-router.get('/', Controller.landingPage)
-router.get('/register', Controller.register)
-router.post('/register', Controller.postRegister)
-router.get('/login', Controller.login)
-router.post('/login', Controller.postLogin)
+const isLogin = (req, res, next) => {
+  if (req.session.userId) {
+    res.redirect(`/${req.session.userRole.toLowerCase()}`)
+  } else {
+    next()
+  }
+}
+
+router.get('/', isLogin, Controller.landingPage)
+router.get('/register', isLogin, Controller.register)
+router.post('/register', isLogin, Controller.postRegister)
+router.get('/login', isLogin, Controller.login)
+router.post('/login', isLogin, Controller.postLogin)
 
 router.use((req, res, next) => {
   if (!req.session.userId) {
@@ -21,16 +29,22 @@ router.post('/guest', Controller.postProfile)
 router.get('/guest/hotels', Controller.getAllHotel)
 router.get('/guest/hotels/:idHotel/form', Controller.getBookingGuest)
 router.post('/guest/hotels/:idHotel/form', Controller.postBookingGuest)
-
+router.get('/guest/booking', Controller)
 
 router.get('/host', Controller.getProfile)
 router.post('/host', Controller.postProfile)
 router.get('/host/hotels', Controller.getHotelsByHost)
-router.get('/host/hotels/add') //Tambah hotel baru
-router.post('/host/hotels/add') //Tambah hotel baru
-router.get('/host/hotels/:idHotel/edit') //Edit booking detail
-router.post('/host/hotels/:idHotel/edit') //Edit booking detail
-router.get('/host/hotels/:idHotel/delete') //Delete hotel
+router.get('/host/hotels/add', Controller.addHotelForm)
+router.post('/host/hotels/add', Controller.addHotel)
+router.get('/host/hotels/:idHotel/edit', Controller.editHotelForm)
+router.post('/host/hotels/:idHotel/edit', Controller.editHotel)
+router.get('/host/hotels/:idHotel/delete', Controller.deleteHotel)
+router.get('/host/hotels/:idHotel/add', Controller.addRoomForm)
+router.post('/host/hotels/:idHotel/add', Controller.addRoom)
+router.get('/host/hotels/:idHotel/room/:idRoom/delete', Controller.deleteRoom)
+
+
+router.get('/logout', Controller.logout)
 
 module.exports = router
 

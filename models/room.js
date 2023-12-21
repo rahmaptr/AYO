@@ -14,9 +14,45 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Room.init({
-    name: DataTypes.STRING,
-    roomNumber: DataTypes.INTEGER,
-    HotelId: DataTypes.INTEGER
+    name: {
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate:{
+        notNull: {
+          msg: "Name tidak boleh kosong"
+        },
+        notEmpty:{
+          msg: "Name tidak boleh kosong"
+
+        }
+      }
+    },
+    roomNumber: {
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate:{
+        notNull: {
+          msg: "room number tidak boleh kosong"
+        },
+        notEmpty:{
+          msg: "room number tidak boleh kosong"
+
+        }
+      }
+    },
+    HotelId: {
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate:{
+        notNull: {
+          msg: "HotelId tidak boleh kosong"
+        },
+        notEmpty:{
+          msg: "HotelId tidak boleh kosong"
+
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'Room',

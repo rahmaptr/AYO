@@ -38,6 +38,7 @@ class Controller {
                 throw new Error('Email/Password not found')
             }
             req.session.userId = user.id
+            req.session.userRole = user.role
             res.redirect(`/${user.role.toLowerCase()}`)
         } catch (error) {
             res.send(error);
@@ -52,7 +53,6 @@ class Controller {
                 },
                 include: Profile
             })
-            // res.send(user)
             res.render('role', {user})
         } catch (error) {
             res.send(error)
@@ -76,8 +76,40 @@ class Controller {
     
     static async getAllHotel(req, res){
         try {
-            let data = await Hotel.findAll()
-            res.render("hotel",{data})
+            const user = await User.findOne({
+                where: {
+                    id: req.session.userId
+                }
+            })
+            const {sort} = req.query
+            let data = []
+
+            if (!sort) {
+                data = await Hotel.findAll({
+                    include: {
+                        model: Room,
+                        attributes: ['name']
+                    }
+                })
+            } else if (sort === 'low') {
+                data = await Hotel.findAll({
+                    include: {
+                        model: Room,
+                        attributes: ['name']
+                    },
+                    order: [['price', 'asc']]
+                })
+            } else {
+                data = await Hotel.findAll({
+                    include: {
+                        model: Room,
+                        attributes: ['name']
+                    },
+                    order: [['price', 'asc']]
+                })
+            }
+
+            res.render("hotel",{data, user})
         } catch (error) {
             res.send(error)
         }
@@ -85,7 +117,12 @@ class Controller {
 
     static async getBookingGuest(req, res) {
         try {
-            res.render("formGuest")
+            const user = await User.findOne({
+                where: {
+                    id: req.session.userId
+                }
+            })
+            res.render("formGuest", {user})
         } catch (error) {
             res.send(error)
         }
@@ -98,14 +135,14 @@ class Controller {
                 startDate,
                 endDate
             } = req.body
-            let data = await Booking.create({
+            await Booking.create({
                 HotelId: idHotel,
+                UserId: req.session.userId,
                 startDate,
                 endDate
             })
-            res.redirect("/guest/hotels", {data})
+            res.redirect("/guest/hotels")
         } catch (error) {
-            console.log(error);
             res.send(error)
         }
     }
@@ -113,18 +150,24 @@ class Controller {
     static async getHotelsByHost(req, res) {
         try {
             const data = await Hotel.findAll({
-                include: {
-                    model: User,
-                    where: {
-                        id: req.session.userId
+                include: [
+                    {
+                        model: User,
+                        where: {
+                            id: req.session.userId
+                        }
+                    },
+                    {
+                        model: Room,
+                        attributes: ['name']
                     }
-                }
-            })
+                ]
+            }) 
             const user = await User.findOne({
                 where: {
                     id: req.session.userId
                 }
-            }) 
+            })
             res.render('hotel', {data, user})
         } catch (error) {
             res.send(error);
@@ -133,8 +176,12 @@ class Controller {
 
     static async addHotelForm(req, res) {
         try {
-            //render form untuk nambah hotel
-            res.render('formAddHost')
+            const user = await User.findOne({
+                where: {
+                    id: req.session.userId
+                }
+            })
+            res.render('formAddHost', {user})
         } catch (error) {
             res.send(error);
         }
@@ -142,8 +189,6 @@ class Controller {
 
     static async addHotel(req, res) {
         try {
-            //Simpan req.body ke hotel
-            //redirect ke /host/hotels
             const {idHotel} = req.params
             const {
                 name,
@@ -152,7 +197,7 @@ class Controller {
                 price,
                 location
             } = req.body
-            let data = await Hotel.create({
+            await Hotel.create({
                 HotelId: idHotel,
                 name,
                 rate,
@@ -160,7 +205,7 @@ class Controller {
                 price,
                 location
             })
-            res.redirect("/host/hotels", {data})
+            res.redirect("/host/hotels")
         } catch (error) {
             res.send(error);
         }
@@ -168,7 +213,13 @@ class Controller {
 
     static async editHotelForm(req, res) {
         try {
-            res.render('formEditHost')
+            const user = await User.findOne({
+                where: {
+                    id: req.session.userId
+                }
+            })
+            const hotel = await Hotel.findByPk(req.params.idHotel)
+            res.render('formEditHost', {user, hotel})
         } catch (error) {
             res.send(error)
         }
@@ -184,7 +235,7 @@ class Controller {
                 price,
                 location
             } = req.body
-            let data = await Hotel.create({
+            await Hotel.create({
                 HotelId: idHotel,
                 name,
                 rate,
@@ -192,7 +243,7 @@ class Controller {
                 price,
                 location
             })
-            res.redirect("/host/hotels", {data})
+            res.redirect("/host/hotels")
         } catch (error) {
             res.send(error);
         }
@@ -200,16 +251,59 @@ class Controller {
 
     static async deleteHotel(req, res) {
         try {
-            const{hotelId} = req.params;
-            let dataHotel = await Hotel.findByPk(hotelId)
+            const{idHotel} = req.params;
+            let dataHotel = await Hotel.findByPk(idHotel)
             await Hotel.destroy({where:{
-                id:hotelId
+                id:idHotel
             }})
-            res.redirect(`/host/hotels/${hotelId}/delete ${dataHotel.name} with ${dataHotel.name} as founder has been removed`)
+            const query = `${dataHotel.name} has been removed`
+            res.redirect(`/host/hotels?query=${query}`)
         } catch (error) {
             res.send(error)
         }
     }
+
+    static async addRoomForm(req, res) {
+        try {
+            const {idHotel} =  req.params
+            res.render('formAddRoom', {idHotel})
+        } catch (error) {
+            res.send(error)
+        }
+    }
+
+    static async addRoom(req, res) {
+        try {
+            const {name, roomNumber} = req.body
+            const {idHotel} =  req.params
+            await Room.create({name, roomNumber, HotelId: idHotel})
+            res.redirect('/host/hotels')
+        } catch (error) {
+            res.send(error)
+        }
+    }
+
+    static async deleteRoom(req, res) {
+        try {
+            const {idRoom} = req.body
+            const room = await Room.findByPk(idRoom)
+            await Room.destroy({where:{
+                id:idRoom
+            }})
+            const query = `${room.name} has been removed`
+            res.redirect(`/host/hotels?query=${query}`)
+        } catch (error) {
+            res.send(error)
+        }
+    }
+
+    static logout(req, res) {
+        req.session.destroy((err) => {
+            if (!err) {
+                res.redirect('/')
+            }
+        })
+    }    
 }
     
 
