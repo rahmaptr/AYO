@@ -142,12 +142,14 @@ class Controller {
 
     static async addHotelForm(req, res) {
         try {
+            const {error} = req.query
+
             const user = await User.findOne({
                 where: {
                     id: req.session.userId
                 }
             })
-            res.render('formAddHost', {user})
+            res.render('formAddHost', {user, error})
         } catch (error) {
             res.send(error);
         }
@@ -188,7 +190,7 @@ class Controller {
             })
             res.redirect("/host/hotels")
         } catch (error) {
-            res.send(error);
+            res.redirect(`/host/hotels/add?error=${error.message}`)
         }
     }
 
@@ -266,7 +268,7 @@ class Controller {
 
     static async deleteRoom(req, res) {
         try {
-            const {idRoom} = req.body
+            const {idRoom} = req.params
             const room = await Room.findByPk(idRoom)
             await Room.destroy({where:{
                 id:idRoom
