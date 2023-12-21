@@ -5,7 +5,7 @@
       "facility": ["Free Wi-Fi", "Swimming Pool", "Fitness Center"],
       "price": 1500000,
       "location": "Jakarta",
-      "imgUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/22/25/ce/ea/kingsford-hotel-manila.jpg?w=1200&h=-1&s=1"
+      "imgUrl": "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg"
     },
     {
       "name": "Hotel Boby",
@@ -13,7 +13,7 @@
       "facility": ["Free Parking", "Restaurant", "Spa"],
       "price": 1600000,
       "location": "Bandung",
-      "imgUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/22/25/ce/ea/kingsford-hotel-manila.jpg?w=1200&h=-1&s=1"
+      "imgUrl": "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg"
     },
     {
       "name": "Hotel Cinta",
@@ -21,7 +21,7 @@
       "facility": ["Airport Shuttle", "Conference Rooms", "Breakfast Included"],
       "price": 1700000,
       "location": "Surabaya",
-      "imgUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/22/25/ce/ea/kingsford-hotel-manila.jpg?w=1200&h=-1&s=1"
+      "imgUrl": "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg"
     },
     {
       "name": "Hotel Dody",
@@ -29,6 +29,6 @@
       "facility": ["Pet Friendly", "Bar", "Laundry Service"],
       "price": 1800000,
       "location": "Bali",
-      "imgUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/22/25/ce/ea/kingsford-hotel-manila.jpg?w=1200&h=-1&s=1"
+      "imgUrl": "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg"
     }
   ]

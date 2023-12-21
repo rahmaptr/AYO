@@ -29,12 +29,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         notEmpty:{
           msg: "name tidak boleh kosong"
-
         }
       }
     },
     rate: {
-      type:DataTypes.STRING,
+      type:DataTypes.INTEGER,
       allowNull:false,
       validate:{
         notNull: {
@@ -42,7 +41,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         notEmpty:{
           msg: "rate tidak boleh kosong"
-
         }
       }
     },
@@ -55,12 +53,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         notEmpty:{
           msg: "facility tidak boleh kosong"
-
         }
       }
     },
     price: {
-      type:DataTypes.STRING,
+      type:DataTypes.INTEGER,
       allowNull:false,
       validate:{
         notNull: {
@@ -68,7 +65,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         notEmpty:{
           msg: "price tidak boleh kosong"
-
+        },
+        isBelowHundredThousand(value) {
+          if (value < 100000) {
+            throw new Error('Harga harus lebih dari 100000')
+          }
         }
       }
     },
@@ -81,10 +82,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         notEmpty:{
           msg: "location tidak boleh kosong"
-
         }
       }
-    }
+    },
+    imgUrl: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Hotel',

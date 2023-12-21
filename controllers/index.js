@@ -81,23 +81,15 @@ class Controller {
                     id: req.session.userId
                 }
             })
-            const {sort} = req.query
+            const {search, info} = req.query
             let data = []
 
-            if (!sort) {
+            if (!search) {
                 data = await Hotel.findAll({
                     include: {
                         model: Room,
                         attributes: ['name']
                     }
-                })
-            } else if (sort === 'low') {
-                data = await Hotel.findAll({
-                    include: {
-                        model: Room,
-                        attributes: ['name']
-                    },
-                    order: [['price', 'asc']]
                 })
             } else {
                 data = await Hotel.findAll({
@@ -105,43 +97,15 @@ class Controller {
                         model: Room,
                         attributes: ['name']
                     },
-                    order: [['price', 'asc']]
+                    where: {
+                        name: {
+                            [Op.iLike]: `%${search}%`
+                        }
+                    }
                 })
             }
 
-            res.render("hotel",{data, user})
-        } catch (error) {
-            res.send(error)
-        }
-    }
-
-    static async getBookingGuest(req, res) {
-        try {
-            const user = await User.findOne({
-                where: {
-                    id: req.session.userId
-                }
-            })
-            res.render("formGuest", {user})
-        } catch (error) {
-            res.send(error)
-        }
-    }
-
-    static async postBookingGuest(req, res) {
-        try {
-            const {idHotel} = req.params
-            const {
-                startDate,
-                endDate
-            } = req.body
-            await Booking.create({
-                HotelId: idHotel,
-                UserId: req.session.userId,
-                startDate,
-                endDate
-            })
-            res.redirect("/guest/hotels")
+            res.render("hotel", {data, user, info})
         } catch (error) {
             res.send(error)
         }
@@ -149,6 +113,8 @@ class Controller {
 
     static async getHotelsByHost(req, res) {
         try {
+            const {info} = req.query
+
             const data = await Hotel.findAll({
                 include: [
                     {
@@ -168,7 +134,7 @@ class Controller {
                     id: req.session.userId
                 }
             })
-            res.render('hotel', {data, user})
+            res.render('hotel', {data, user, info})
         } catch (error) {
             res.send(error);
         }
@@ -189,7 +155,6 @@ class Controller {
 
     static async addHotel(req, res) {
         try {
-            const {idHotel} = req.params
             const {
                 name,
                 rate,
@@ -198,12 +163,28 @@ class Controller {
                 location
             } = req.body
             await Hotel.create({
-                HotelId: idHotel,
                 name,
                 rate,
                 facility,
                 price,
-                location
+                location,
+                imgUrl: `uploads/${req.file.filename}`
+            })
+            const {id} = await Hotel.findOne({
+                attributes: ['id'],
+                where: {
+                    name,
+                    rate,
+                    facility,
+                    price,
+                    location
+                }
+            })
+            await Booking.create({
+                HotelId: id,
+                UserId: req.session.userId,
+                startDate: new Date(),
+                endDate: new Date(2024,11,31)
             })
             res.redirect("/host/hotels")
         } catch (error) {
@@ -256,8 +237,8 @@ class Controller {
             await Hotel.destroy({where:{
                 id:idHotel
             }})
-            const query = `${dataHotel.name} has been removed`
-            res.redirect(`/host/hotels?query=${query}`)
+            const info = `${dataHotel.name} has been removed`
+            res.redirect(`/host/hotels?info=${info}`)
         } catch (error) {
             res.send(error)
         }
@@ -290,8 +271,8 @@ class Controller {
             await Room.destroy({where:{
                 id:idRoom
             }})
-            const query = `${room.name} has been removed`
-            res.redirect(`/host/hotels?query=${query}`)
+            const info = `${room.name} has been removed`
+            res.redirect(`/host/hotels?info=${info}`)
         } catch (error) {
             res.send(error)
         }

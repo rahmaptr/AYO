@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Booking.init({
     UserId: {
-      type:DataTypes.STRING,
+      type:DataTypes.INTEGER,
       allowNull:false,
       validate:{
         notNull: {
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     HotelId: {
-      type:DataTypes.STRING,
+      type:DataTypes.INTEGER,
       allowNull:false,
       validate:{
         notNull: {
@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     startDate: {
-      type:DataTypes.STRING,
+      type:DataTypes.DATE,
       allowNull:false,
       validate:{
         notNull: {
@@ -49,16 +49,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         notEmpty:{
           msg: "startDate tidak boleh kosong"
-
-        },
-        isBefore: {
-          msg:'startDate harus sebelum hari ini',
-          args: new Date()
         }
       }
     },
     endDate: {
-      type:DataTypes.STRING,
+      type:DataTypes.DATE,
       allowNull:false,
       validate:{
         notNull: {

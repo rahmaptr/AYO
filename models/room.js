@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     roomNumber: {
-      type:DataTypes.STRING,
+      type:DataTypes.INTEGER,
       allowNull:false,
       validate:{
         notNull: {
@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     HotelId: {
-      type:DataTypes.STRING,
+      type:DataTypes.INTEGER,
       allowNull:false,
       validate:{
         notNull: {

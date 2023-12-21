@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     birthDate: {
-      type:DataTypes.STRING,
+      type:DataTypes.DATE,
       allowNull:false,
       validate:{
         notNull: {
@@ -67,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     UserId: {
-      type:DataTypes.STRING,
+      type:DataTypes.INTEGER,
       allowNull:false,
       validate:{
         notNull: {
