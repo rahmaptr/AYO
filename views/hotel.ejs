@@ -12,7 +12,12 @@
             <h5 class="card-title"><%= el.price %> </h5>
             <h5 class="card-title"><%= el.location %></h5>
             <h6 class="card-title"><%= el.facility %></h6>
-            <a href="/guest/form" class="btn btn-primary">Booking</a>
+            <% if (user.role === 'Guest') { %>
+              <a href="/guest/form" class="btn btn-primary">Booking</a>
+            <% } else { %>
+              <a href="/host/hotels/<%= el.id %>/edit" class="btn btn-primary">Edit</a>
+              <a href="/host/hotels/<%= el.id %>/delete" class="btn btn-primary">Delete</a>
+            <% } %>
           </div>
         </div>
      <% }) %>
